@@ -380,6 +380,31 @@ const findRoutesJS = (startId, endId, mode = 'shortest') => {
 
 // --- API ROUTES ---
 
+// Welcome / API Index
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Metro Route Finder REST API',
+    status: 'online',
+    version: '1.0.0',
+    health: '/api/health',
+    endpoints: {
+      health: 'GET /api/health',
+      stations: 'GET /api/stations',
+      connections: 'GET /api/connections',
+      graph: 'GET /api/graph',
+      stats: 'GET /api/stats',
+      route: 'POST /api/route',
+      compare: 'POST /api/compare',
+      weather: 'GET /api/weather',
+      history: 'GET /api/history'
+    }
+  });
+});
+
+app.get('/api', (req, res) => {
+  res.redirect('/');
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', success: true, timestamp: new Date().toISOString() });
