@@ -1,0 +1,619 @@
+[
+  {
+    "id": "HST-124575",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-19T06:03:42.911Z"
+  },
+  {
+    "id": "HST-719532",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-19T06:03:42.865Z"
+  },
+  {
+    "id": "HST-368489",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-19T05:47:18.789Z"
+  },
+  {
+    "id": "HST-121312",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-19T05:47:18.774Z"
+  },
+  {
+    "id": "HST-159834",
+    "start": "A",
+    "end": "H",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H"
+    ],
+    "fare": 90,
+    "distance": 16,
+    "time": 22,
+    "timestamp": "2026-07-19T05:46:12.667Z"
+  },
+  {
+    "id": "HST-263607",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-18T15:35:04.028Z"
+  },
+  {
+    "id": "HST-741835",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-18T15:35:04.001Z"
+  },
+  {
+    "id": "HST-158374",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-18T15:35:00.239Z"
+  },
+  {
+    "id": "HST-335439",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 99,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-18T15:35:00.217Z"
+  },
+  {
+    "id": "HST-845896",
+    "start": "A",
+    "end": "H",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H"
+    ],
+    "fare": 90,
+    "distance": 16,
+    "time": 22,
+    "timestamp": "2026-07-18T15:34:23.947Z"
+  },
+  {
+    "id": "HST-154422",
+    "start": "A",
+    "end": "D",
+    "mode": "fewest_stops",
+    "route": [
+      "A",
+      "B",
+      "D"
+    ],
+    "fare": 60.9375,
+    "distance": 13,
+    "time": 17,
+    "timestamp": "2026-07-15T13:44:36.103Z"
+  },
+  {
+    "id": "HST-917729",
+    "start": "A",
+    "end": "D",
+    "mode": "cheapest",
+    "route": [
+      "A",
+      "B",
+      "D"
+    ],
+    "fare": 60.9375,
+    "distance": 13,
+    "time": 17,
+    "timestamp": "2026-07-15T13:44:33.638Z"
+  },
+  {
+    "id": "HST-478385",
+    "start": "A",
+    "end": "D",
+    "mode": "astar",
+    "route": [
+      "A",
+      "B",
+      "D"
+    ],
+    "fare": 60.9375,
+    "distance": 13,
+    "time": 17,
+    "timestamp": "2026-07-15T13:44:29.998Z"
+  },
+  {
+    "id": "HST-487993",
+    "start": "A",
+    "end": "D",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D"
+    ],
+    "fare": 60.9375,
+    "distance": 13,
+    "time": 17,
+    "timestamp": "2026-07-15T13:44:25.286Z"
+  },
+  {
+    "id": "HST-964952",
+    "start": "A",
+    "end": "D",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "D"
+    ],
+    "fare": 60.9375,
+    "distance": 13,
+    "time": 17,
+    "timestamp": "2026-07-15T13:44:22.919Z"
+  },
+  {
+    "id": "HST-538805",
+    "start": "A",
+    "end": "B",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B"
+    ],
+    "fare": 23.4375,
+    "distance": 5,
+    "time": 7,
+    "timestamp": "2026-07-15T13:44:19.045Z"
+  },
+  {
+    "id": "HST-691664",
+    "start": "A",
+    "end": "H",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H"
+    ],
+    "fare": 75,
+    "distance": 16,
+    "time": 22,
+    "timestamp": "2026-07-15T13:44:16.912Z"
+  },
+  {
+    "id": "HST-669244",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 103.125,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-15T13:41:22.036Z"
+  },
+  {
+    "id": "HST-537132",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:22.005Z"
+  },
+  {
+    "id": "HST-543841",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:21.957Z"
+  },
+  {
+    "id": "HST-638570",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:21.881Z"
+  },
+  {
+    "id": "HST-961855",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:21.255Z"
+  },
+  {
+    "id": "HST-324259",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:20.631Z"
+  },
+  {
+    "id": "HST-927281",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:20.053Z"
+  },
+  {
+    "id": "HST-632761",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:19.190Z"
+  },
+  {
+    "id": "HST-684289",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 103.125,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-15T13:41:12.995Z"
+  },
+  {
+    "id": "HST-383425",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H",
+      "F",
+      "G"
+    ],
+    "fare": 107.8125,
+    "distance": 23,
+    "time": 31,
+    "timestamp": "2026-07-15T13:41:11.976Z"
+  },
+  {
+    "id": "HST-335104",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 103.125,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-15T13:40:55.027Z"
+  },
+  {
+    "id": "HST-654609",
+    "start": "A",
+    "end": "G",
+    "mode": "fastest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 137.5,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-15T13:40:49.961Z"
+  },
+  {
+    "id": "HST-627194",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 137.5,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-15T13:40:28.676Z"
+  },
+  {
+    "id": "HST-248230",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 137.5,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-15T13:40:28.650Z"
+  },
+  {
+    "id": "HST-932924",
+    "start": "A",
+    "end": "H",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H"
+    ],
+    "fare": 90,
+    "distance": 16,
+    "time": 22,
+    "timestamp": "2026-07-15T12:30:22.543Z"
+  },
+  {
+    "id": "HST-334855",
+    "start": "A",
+    "end": "H",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H"
+    ],
+    "fare": 90,
+    "distance": 16,
+    "time": 22,
+    "timestamp": "2026-07-15T12:29:20.530Z"
+  },
+  {
+    "id": "HST-907039",
+    "start": "A",
+    "end": "H",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "C",
+      "H"
+    ],
+    "fare": 90,
+    "distance": 16,
+    "time": 22,
+    "timestamp": "2026-07-15T12:28:20.832Z"
+  },
+  {
+    "id": "HST-327816",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 110,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-15T12:11:07.014Z"
+  },
+  {
+    "id": "HST-407608",
+    "start": "A",
+    "end": "G",
+    "mode": "shortest",
+    "route": [
+      "A",
+      "B",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "fare": 41,
+    "distance": 22,
+    "time": 29,
+    "timestamp": "2026-07-12T08:18:53.391Z"
+  }
+]

@@ -1,0 +1,10 @@
+[
+  { "id": "A", "name": "Alpha", "line": "Red", "x": 120, "y": 120, "interchange": false },
+  { "id": "B", "name": "Bravo", "line": "Red", "x": 240, "y": 120, "interchange": false },
+  { "id": "C", "name": "Central", "line": "Red", "x": 360, "y": 120, "interchange": true },
+  { "id": "D", "name": "Delta", "line": "Blue", "x": 360, "y": 240, "interchange": false, "wheelchair": false },
+  { "id": "E", "name": "Echo", "line": "Blue", "x": 480, "y": 240, "interchange": false, "wheelchair": false },
+  { "id": "F", "name": "Foxtrot", "line": "Green", "x": 600, "y": 240, "interchange": true },
+  { "id": "G", "name": "Garden", "line": "Green", "x": 720, "y": 240, "interchange": false },
+  { "id": "H", "name": "Harbor", "line": "Yellow", "x": 720, "y": 120, "interchange": true }
+]

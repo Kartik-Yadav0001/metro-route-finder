@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  # ─── Job 1: Frontend Build ───────────────────────────────────────────────
+  frontend:
+    name: Frontend Build (Vite + React)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install
+      - run: npm run build
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 3
+
+  # ─── Job 2: C++ Backend Build & Unit Tests ───────────────────────────────
+  backend:
+    name: C++ Backend (CMake + GTest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.27.9'
+      - name: Install GCC
+        run: sudo apt-get install -y g++ libgtest-dev
+      - name: Configure backend
+        working-directory: backend
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Build all targets
+        working-directory: backend
+        run: cmake --build build --parallel
+      - name: Run C++ unit tests
+        working-directory: backend
+        run: |
+          ./build/RouteFinderTests
+          ./build/AdminCrudTests
+          ./build/PersistenceTests
+
+  # ─── Job 3: API Integration Tests ────────────────────────────────────────
+  api-tests:
+    name: API Integration Tests (Node.js)
+    runs-on: ubuntu-latest
+    needs: [backend]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+      - name: Install API dependencies
+        working-directory: api
+        run: npm install
+      - name: Start API server in background
+        working-directory: api
+        run: |
+          node server.js &
+          echo "Waiting for server to boot..."
+          sleep 4
+      - name: Run integration tests
+        run: node tests/api_tests.js

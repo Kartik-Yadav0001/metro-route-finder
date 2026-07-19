@@ -1,0 +1,29 @@
+# CODEOWNERS — Metro Route Finder
+# Each line maps a file/directory pattern to responsible owners.
+# Owners are automatically requested for review when a PR touches their files.
+
+# Global fallback owner
+*                           @metro-team/maintainers
+
+# C++ backend engine
+/backend/                   @metro-team/cpp-engineers
+
+# Node.js API layer
+/api/                       @metro-team/backend-engineers
+
+# React frontend
+/frontend/                  @metro-team/frontend-engineers
+
+# Database schemas
+/database/                  @metro-team/data-engineers
+
+# CI/CD & DevOps
+/.github/                   @metro-team/devops
+
+# Documentation
+/docs/                      @metro-team/tech-writers
+README.md                   @metro-team/maintainers
+DOCUMENTATION.md            @metro-team/tech-writers
+
+# Security-sensitive files
+/api/server.js              @metro-team/security-team @metro-team/backend-engineers
