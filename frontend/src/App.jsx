@@ -4,7 +4,7 @@ import { stations as mockStations, connections as mockConnections, stationMap as
 import MetroMap from './components/MetroMap';
 import { fuzzyMatch } from './lib/searchUtils';
 
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = import.meta.env.VITE_API_BASE || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:3001/api' : 'https://metro-route-finder.onrender.com/api');
 
 const navItems = [
   { to: '/', label: 'Home', labelHi: 'होम' },
