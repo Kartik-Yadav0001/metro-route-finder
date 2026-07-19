@@ -6,6 +6,14 @@ import { fuzzyMatch } from './lib/searchUtils';
 
 const API_BASE = import.meta.env.VITE_API_BASE || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:3001/api' : 'https://metro-route-finder.onrender.com/api');
 
+// Defensive Array Join helper to prevent production crashes
+const safeJoin = (arr, separator = ' ➔ ', fallback = 'N/A') => {
+  if (Array.isArray(arr) && arr.length > 0) {
+    return arr.join(separator);
+  }
+  return fallback;
+};
+
 const navItems = [
   { to: '/', label: 'Home', labelHi: 'होम' },
   { to: '/search', label: 'Search Station', labelHi: 'स्टेशन खोज' },
@@ -375,23 +383,23 @@ function WeatherWidget() {
     <div className="glass rounded-[32px] p-6 border border-white/5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-3xl">{data.weather.icon}</span>
+          <span className="text-3xl">{data?.weather?.icon || '🌤️'}</span>
           <div>
             <h4 className="text-base font-bold text-white">Live Transit Conditions</h4>
-            <p className="text-xs text-slate-400">{data.weather.label} — Visibility: {data.weather.visibility}</p>
+            <p className="text-xs text-slate-400">{data?.weather?.label || 'Normal'} — Visibility: {data?.weather?.visibility || 'Good'}</p>
           </div>
         </div>
         <div className="text-right">
-          <span className={`rounded-full border px-3 py-1 text-xs font-bold ${congestionColor[data.overallCongestion] || 'text-slate-400 bg-white/5 border-white/10'}`}>
-            {data.isPeakHour ? '🔴 Peak Hour' : '🟢 Off-Peak'} · {data.overallCongestion} Congestion
+          <span className={`rounded-full border px-3 py-1 text-xs font-bold ${congestionColor[data?.overallCongestion] || 'text-slate-400 bg-white/5 border-white/10'}`}>
+            {data?.isPeakHour ? '🔴 Peak Hour' : '🟢 Off-Peak'} · {data?.overallCongestion || 'Normal'} Congestion
           </span>
         </div>
       </div>
       <p className="text-xs text-slate-300 bg-white/5 px-4 py-2.5 rounded-2xl border border-white/5">
-        ℹ️ {data.weather.advisory}
+        ℹ️ {data?.weather?.advisory || 'Transit operations running normally.'}
       </p>
       <div className="grid gap-2 grid-cols-2 sm:grid-cols-5">
-        {data.lines.map(line => (
+        {(Array.isArray(data?.lines) ? data.lines : []).map(line => (
           <div key={line.name} className="rounded-2xl bg-white/5 border border-white/5 p-3 text-center space-y-1">
             <span className="text-[10px] font-bold text-slate-400 block">{line.name}</span>
             <span className={`rounded-full border text-[9px] font-bold px-2 py-0.5 ${congestionColor[line.congestion] || 'text-slate-400 bg-white/5 border-white/10'}`}>{line.congestion}</span>
@@ -745,39 +753,42 @@ function RouteFinderPage({ language, stations, setToast }) {
 
             {/* Intermediate Station list */}
             <div className="rounded-[24px] bg-white/5 p-5 border border-white/5 space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">{translations[language].stations} ({activeResult.stations})</h4>
+              <h4 className="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">{translations[language].stations} ({activeResult.stations || (activeResult.route || activeResult.path || []).length})</h4>
               <div className="flex flex-wrap gap-2 text-xs">
-                {activeResult.route.map((nodeId, idx) => (
+                {(Array.isArray(activeResult.route) ? activeResult.route : Array.isArray(activeResult.path) ? activeResult.path : []).map((nodeId, idx, arr) => (
                   <div key={nodeId} className="flex items-center gap-2">
                     <span className="rounded-xl bg-white/10 px-3.5 py-2 font-bold text-white border border-white/5 flex items-center gap-1.5">
                       {wheelchair && <span>♿</span>}
                       {nodeId}
                     </span>
-                    {idx < activeResult.route.length - 1 && <span className="text-slate-600 font-bold">→</span>}
+                    {idx < arr.length - 1 && <span className="text-slate-600 font-bold">→</span>}
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Yen's Alternative options lists */}
-            {result.routes && result.routes.length > 1 && (
+            {Array.isArray(result?.routes) && result.routes.length > 1 && (
               <div className="space-y-3">
                 <h4 className="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">{translations[language].options}</h4>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {result.routes.slice(1).map((alternative, index) => (
-                    <div key={index} className="rounded-2xl border border-white/5 bg-slate-950/40 p-4 text-xs space-y-2">
-                      <div className="font-bold text-slate-300 flex items-center justify-between">
-                        <span>Alternative Route {index + 1}</span>
-                        <span className="text-[10px] text-slate-500 font-mono">{alternative.route.length} stops</span>
+                  {result.routes.slice(1).map((alternative, index) => {
+                    const altPath = Array.isArray(alternative?.route) ? alternative.route : Array.isArray(alternative?.path) ? alternative.path : [];
+                    return (
+                      <div key={index} className="rounded-2xl border border-white/5 bg-slate-950/40 p-4 text-xs space-y-2">
+                        <div className="font-bold text-slate-300 flex items-center justify-between">
+                          <span>Alternative Route {index + 1}</span>
+                          <span className="text-[10px] text-slate-500 font-mono">{altPath.length} stops</span>
+                        </div>
+                        <p className="text-slate-400 overflow-hidden text-ellipsis whitespace-nowrap">{safeJoin(altPath, ' → ', 'Route unavailable')}</p>
+                        <div className="flex items-center gap-4 text-slate-400 font-semibold">
+                          <span>{alternative?.distance ?? 0} km</span>
+                          <span>₹{alternative?.fare ?? 0}</span>
+                          <span>{alternative?.time ?? 0} min</span>
+                        </div>
                       </div>
-                      <p className="text-slate-400 overflow-hidden text-ellipsis whitespace-nowrap">{alternative.route.join(' → ')}</p>
-                      <div className="flex items-center gap-4 text-slate-400 font-semibold">
-                        <span>{alternative.distance} km</span>
-                        <span>₹{alternative.fare}</span>
-                        <span>{alternative.time} min</span>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -1065,13 +1076,15 @@ function InteractiveMapPage({ language, stations, connections }) {
   );
 }
 
-function AlgorithmsPage({ language, stations }) {
+function AlgorithmsPage({ language, stations = [] }) {
   const [activeTab, setActiveTab] = useState('simulator');
   const [start, setStart] = useState('A');
   const [end, setEnd] = useState('G');
   const [comparison, setComparison] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const safeStations = Array.isArray(stations) ? stations : [];
 
   const runComparison = async () => {
     setLoading(true);
@@ -1083,24 +1096,26 @@ function AlgorithmsPage({ language, stations }) {
         body: JSON.stringify({ start, end })
       });
       const data = await response.json();
-      if (data.error) {
+      if (data && data.error) {
         setError(data.error);
         setComparison(null);
       } else {
-        setComparison(data.comparison);
+        const rawComp = Array.isArray(data?.comparison) ? data.comparison : Array.isArray(data) ? data : [];
+        setComparison(rawComp);
       }
     } catch (err) {
       setError('Express API offline. Algorithmic simulator unavailable.');
+      setComparison(null);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (stations && stations.length > 0) {
+    if (safeStations.length > 0) {
       runComparison();
     }
-  }, [start, end, stations]);
+  }, [start, end, safeStations.length]);
 
   const list = [
     { name: 'Dijkstra', desc: 'Finds optimal route by distance, travel time, or fare weights using min-priority queue.', complexity: 'O((V + E) log V)' },
@@ -1113,9 +1128,32 @@ function AlgorithmsPage({ language, stations }) {
     { name: 'Yen\'s K-Shortest', desc: 'Finds K loopless alternative shortest paths by virtual node/edge blocking.', complexity: 'O(K·V(E + V log V))' },
   ];
 
-  const fastestVal = comparison ? Math.min(...comparison.map(c => c.stats.executionTimeMs)) : 0;
-  const leastNodesVal = comparison ? Math.min(...comparison.map(c => c.stats.nodesVisited)) : 0;
-  const leastMemoryVal = comparison ? Math.min(...comparison.map(c => c.stats.memoryUsageBytes)) : 0;
+  const safeComp = Array.isArray(comparison) ? comparison : [];
+  const normalizedComp = safeComp.map(c => {
+    const name = c?.name || c?.stats?.algorithmName || 'Algorithm';
+    const timeMs = typeof c?.stats?.executionTimeMs === 'number' ? c.stats.executionTimeMs : (typeof c?.time === 'number' ? c.time : 0);
+    const nodes = typeof c?.stats?.nodesVisited === 'number' ? c.stats.nodesVisited : 0;
+    const memory = typeof c?.stats?.memoryUsageBytes === 'number' ? c.stats.memoryUsageBytes : 0;
+    const dist = typeof c?.distance === 'number' ? c.distance : 0;
+    const interchanges = typeof c?.interchanges === 'number' ? c.interchanges : 0;
+    const pathNodes = Array.isArray(c?.route) ? c.route : Array.isArray(c?.path) ? c.path : [];
+
+    return {
+      raw: c,
+      name,
+      timeMs,
+      nodes,
+      memory,
+      dist,
+      interchanges,
+      pathNodes,
+      pathDisplay: safeJoin(pathNodes, ' ➔ ', 'Path unavailable')
+    };
+  });
+
+  const fastestVal = normalizedComp.length > 0 ? Math.min(...normalizedComp.map(c => c.timeMs)) : 0;
+  const leastNodesVal = normalizedComp.length > 0 ? Math.min(...normalizedComp.map(c => c.nodes)) : 0;
+  const leastMemoryVal = normalizedComp.length > 0 ? Math.min(...normalizedComp.map(c => c.memory)) : 0;
 
   return (
     <div className="glass rounded-[32px] p-6 border border-white/5 space-y-6">
@@ -1160,13 +1198,13 @@ function AlgorithmsPage({ language, stations }) {
             <div>
               <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Benchmark Start</label>
               <select value={start} onChange={e => setStart(e.target.value)} className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 p-2 text-xs text-white outline-none">
-                {stations.map(s => <option key={s.id} value={s.id}>{s.name} ({s.id})</option>)}
+                {safeStations.map(s => <option key={s.id} value={s.id}>{s.name} ({s.id})</option>)}
               </select>
             </div>
             <div>
               <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Benchmark End</label>
               <select value={end} onChange={e => setEnd(e.target.value)} className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 p-2 text-xs text-white outline-none">
-                {stations.map(s => <option key={s.id} value={s.id}>{s.name} ({s.id})</option>)}
+                {safeStations.map(s => <option key={s.id} value={s.id}>{s.name} ({s.id})</option>)}
               </select>
             </div>
           </div>
@@ -1174,8 +1212,8 @@ function AlgorithmsPage({ language, stations }) {
           {error && <div className="text-xs text-orange-200 bg-orange-500/10 border border-orange-500/20 p-3 rounded-xl">{error}</div>}
 
           {loading ? (
-            <div className="py-12 text-center text-slate-500 text-xs">Simulating C++ route benchmarks...</div>
-          ) : comparison ? (
+            <div className="py-12 text-center text-slate-500 text-xs font-medium">Computing algorithmic benchmarks...</div>
+          ) : normalizedComp.length > 0 ? (
             <div className="space-y-6">
               <div className="overflow-x-auto rounded-2xl border border-white/5 bg-slate-950/40">
                 <table className="w-full text-left border-collapse text-xs">
@@ -1191,24 +1229,24 @@ function AlgorithmsPage({ language, stations }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {comparison.map((c, i) => {
-                      const isFastest = c.stats.executionTimeMs === fastestVal && fastestVal > 0;
-                      const isLeastNodes = c.stats.nodesVisited === leastNodesVal;
-                      const isLeastMemory = c.stats.memoryUsageBytes === leastMemoryVal;
-                      
+                    {normalizedComp.map((c, i) => {
+                      const isFastest = c.timeMs === fastestVal && fastestVal > 0;
+                      const isLeastNodes = c.nodes === leastNodesVal && leastNodesVal > 0;
+                      const isLeastMemory = c.memory === leastMemoryVal && leastMemoryVal > 0;
+
                       return (
                         <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition">
                           <td className="p-3 font-bold text-white flex items-center gap-1.5">
-                            {c.stats.algorithmName}
+                            {c.name}
                             {isFastest && <span className="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-bold">⚡ Fast</span>}
                           </td>
-                          <td className={`p-3 text-right font-mono ${isFastest ? 'text-emerald-400 font-bold' : ''}`}>{c.stats.executionTimeMs.toFixed(3)} ms</td>
-                          <td className={`p-3 text-right font-mono ${isLeastNodes ? 'text-orange-400 font-bold' : ''}`}>{c.stats.nodesVisited} nodes</td>
-                          <td className={`p-3 text-right font-mono ${isLeastMemory ? 'text-yellow-400 font-bold' : ''}`}>{c.stats.memoryUsageBytes} B</td>
-                          <td className="p-3 text-right font-mono">{c.distance} km</td>
+                          <td className={`p-3 text-right font-mono ${isFastest ? 'text-emerald-400 font-bold' : ''}`}>{c.timeMs.toFixed(3)} ms</td>
+                          <td className={`p-3 text-right font-mono ${isLeastNodes ? 'text-orange-400 font-bold' : ''}`}>{c.nodes} nodes</td>
+                          <td className={`p-3 text-right font-mono ${isLeastMemory ? 'text-yellow-400 font-bold' : ''}`}>{c.memory} B</td>
+                          <td className="p-3 text-right font-mono">{c.dist} km</td>
                           <td className="p-3 text-right font-mono">{c.interchanges}</td>
-                          <td className="p-3 font-mono text-[10px] text-slate-400 truncate max-w-[200px]" title={c.route.join(' ➔ ')}>
-                            {c.route.join('➔')}
+                          <td className="p-3 font-mono text-[10px] text-slate-400 truncate max-w-[200px]" title={c.pathDisplay}>
+                            {c.pathDisplay}
                           </td>
                         </tr>
                       );
@@ -1221,14 +1259,14 @@ function AlgorithmsPage({ language, stations }) {
                 <div className="glass rounded-[24px] p-5 border border-white/5 space-y-3 bg-slate-950/10">
                   <h4 className="text-xs font-bold text-slate-300">Complexity Search Depth (Nodes Visited)</h4>
                   <div className="space-y-2">
-                    {comparison.map((c, i) => {
-                      const maxNodes = Math.max(...comparison.map(comp => comp.stats.nodesVisited)) || 1;
-                      const ratio = (c.stats.nodesVisited / maxNodes) * 100;
+                    {normalizedComp.map((c, i) => {
+                      const maxNodes = Math.max(...normalizedComp.map(comp => comp.nodes)) || 1;
+                      const ratio = (c.nodes / maxNodes) * 100;
                       return (
                         <div key={i} className="space-y-1">
                           <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                            <span>{c.stats.algorithmName}</span>
-                            <span className="font-bold text-slate-200">{c.stats.nodesVisited} nodes</span>
+                            <span>{c.name}</span>
+                            <span className="font-bold text-slate-200">{c.nodes} nodes</span>
                           </div>
                           <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
                             <div className="bg-gradient-to-r from-orange-500 to-amber-300 h-full rounded-full transition-all duration-500" style={{ width: `${ratio}%` }} />
@@ -1242,14 +1280,14 @@ function AlgorithmsPage({ language, stations }) {
                 <div className="glass rounded-[24px] p-5 border border-white/5 space-y-3 bg-slate-950/10">
                   <h4 className="text-xs font-bold text-slate-300">Heap Allocation Footprint (Bytes)</h4>
                   <div className="space-y-2">
-                    {comparison.map((c, i) => {
-                      const maxMem = Math.max(...comparison.map(comp => comp.stats.memoryUsageBytes)) || 1;
-                      const ratio = (c.stats.memoryUsageBytes / maxMem) * 100;
+                    {normalizedComp.map((c, i) => {
+                      const maxMem = Math.max(...normalizedComp.map(comp => comp.memory)) || 1;
+                      const ratio = (c.memory / maxMem) * 100;
                       return (
                         <div key={i} className="space-y-1">
                           <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                            <span>{c.stats.algorithmName}</span>
-                            <span className="font-bold text-slate-200">{c.stats.memoryUsageBytes} Bytes</span>
+                            <span>{c.name}</span>
+                            <span className="font-bold text-slate-200">{c.memory} Bytes</span>
                           </div>
                           <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
                             <div className="bg-gradient-to-r from-yellow-500 to-amber-400 h-full rounded-full transition-all duration-500" style={{ width: `${ratio}%` }} />
@@ -1262,7 +1300,7 @@ function AlgorithmsPage({ language, stations }) {
               </div>
             </div>
           ) : (
-            <div className="text-xs text-slate-500 py-10 text-center">No comparison data available.</div>
+            <div className="text-xs text-slate-500 py-10 text-center">No algorithm benchmark data available.</div>
           )}
         </div>
       )}
@@ -1364,7 +1402,7 @@ function NetworkAnalyticsPage({ language }) {
                 <span className="font-bold text-emerald-400">{mst.totalDistance} km</span>
               </div>
               <div className="max-h-[180px] overflow-y-auto space-y-1 pr-1 font-mono text-[11px]">
-                {mst.edges.map((e, idx) => (
+                {(Array.isArray(mst?.edges) ? mst.edges : []).map((e, idx) => (
                   <div key={idx} className="flex justify-between p-2 rounded bg-white/5 border border-white/5">
                     <span>{e.from} ➔ {e.to}</span>
                     <span className="text-slate-400">{e.distance} km • {e.line} Line</span>
@@ -1391,11 +1429,11 @@ function NetworkAnalyticsPage({ language }) {
                   {cycles.hasCycle ? '⚠️ Yes' : 'No'}
                 </span>
               </div>
-              {cycles.hasCycle && cycles.cyclePath && (
+              {cycles.hasCycle && (
                 <div className="bg-orange-500/5 border border-orange-500/10 p-3.5 rounded-xl text-xs space-y-2">
                   <div className="text-slate-300 font-semibold">Detected Cycle Path:</div>
                   <div className="font-mono text-orange-400 font-bold tracking-wider">
-                    {cycles.cyclePath.join(' ➔ ')}
+                    {safeJoin(cycles.cyclePath, ' ➔ ', 'No cycle path data')}
                   </div>
                   <div className="text-[10px] text-slate-500 leading-normal">
                     Redundant tracks are useful for backup routing during disruptions or delays.

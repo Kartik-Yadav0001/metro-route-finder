@@ -61,18 +61,22 @@ export default function MetroMap({ stations = [], connections = [], activeRoute 
       trainMarker.current = null;
     }
 
-    const stationMap = Object.fromEntries(stations.map(s => [s.id, s]));
+    const safeStations = Array.isArray(stations) ? stations : [];
+    const safeConnections = Array.isArray(connections) ? connections : [];
+    const safeRoute = Array.isArray(activeRoute) ? activeRoute : [];
+
+    const stationMap = Object.fromEntries(safeStations.map(s => [s.id, s]));
 
     // 1. Draw connections (Tracks)
-    connections.forEach(edge => {
+    safeConnections.forEach(edge => {
       const from = stationMap[edge.from];
       const to = stationMap[edge.to];
       if (!from || !to) return;
 
-      const isHighlighted = activeRoute.length > 0 && 
-        activeRoute.includes(edge.from) && 
-        activeRoute.includes(edge.to) &&
-        Math.abs(activeRoute.indexOf(edge.from) - activeRoute.indexOf(edge.to)) === 1;
+      const isHighlighted = safeRoute.length > 0 && 
+        safeRoute.includes(edge.from) && 
+        safeRoute.includes(edge.to) &&
+        Math.abs(safeRoute.indexOf(edge.from) - safeRoute.indexOf(edge.to)) === 1;
 
       const isDelayed = isDelayMode && (edge.status === 'Delayed' || edge.delayMin > 0);
       const color = isDelayed ? '#ef4444' : (lineColors[edge.line] || '#cbd5e1');
@@ -108,10 +112,10 @@ export default function MetroMap({ stations = [], connections = [], activeRoute 
     });
 
     // 2. Draw stations (Markers)
-    stations.forEach(station => {
-      const isRouteStation = activeRoute.includes(station.id);
-      const isSource = activeRoute.length > 0 && activeRoute[0] === station.id;
-      const isDest = activeRoute.length > 0 && activeRoute[activeRoute.length - 1] === station.id;
+    safeStations.forEach(station => {
+      const isRouteStation = safeRoute.includes(station.id);
+      const isSource = safeRoute.length > 0 && safeRoute[0] === station.id;
+      const isDest = safeRoute.length > 0 && safeRoute[safeRoute.length - 1] === station.id;
 
       const isAccessible = !isAccessibilityMode || station.wheelchair;
 
@@ -121,10 +125,10 @@ export default function MetroMap({ stations = [], connections = [], activeRoute 
       let borderOpacity = isAccessible ? 1.0 : 0.15;
 
       if (isSource) {
-        color = '#f97316'; // orange glow for source
+        color = '#f97316';
         radius = 12;
       } else if (isDest) {
-        color = '#22c55e'; // green glow for dest
+        color = '#22c55e';
         radius = 12;
       } else if (isRouteStation) {
         radius = station.interchange ? 11 : 9;
@@ -140,7 +144,6 @@ export default function MetroMap({ stations = [], connections = [], activeRoute 
         opacity: borderOpacity
       }).addTo(layers);
 
-      // Tooltip showing station details
       circle.bindTooltip(
         `<div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
            <span>${station.name} (${station.id})</span>
@@ -151,7 +154,6 @@ export default function MetroMap({ stations = [], connections = [], activeRoute 
         { permanent: false, direction: 'top', className: 'rounded-xl border border-slate-200 bg-white p-2 shadow-lg' }
       );
 
-      // Clicks select station
       circle.on('click', () => {
         if (onSelectStation) {
           onSelectStation(station.id);
@@ -160,8 +162,8 @@ export default function MetroMap({ stations = [], connections = [], activeRoute 
     });
 
     // 3. Journey Animation (Metro Train moving along the route)
-    if (activeRoute.length > 1) {
-      const routeCoords = activeRoute
+    if (safeRoute.length > 1) {
+      const routeCoords = safeRoute
         .map(id => stationMap[id])
         .filter(Boolean)
         .map(s => [s.y, s.x]);
