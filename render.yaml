@@ -1,4 +1,5 @@
 services:
+  # ─── 1. Express REST API Backend Service ──────────────────────────────────
   - type: web
     name: metro-route-finder-api
     env: node
@@ -12,3 +13,19 @@ services:
         value: 10000
       - key: NODE_ENV
         value: production
+
+  # ─── 2. React SPA Frontend Static Site ────────────────────────────────────
+  - type: static
+    name: metro-route-finder-frontend
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE
+        value: https://metro-route-finder.onrender.com/api
