@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: metro-route-finder-api
+    env: node
+    region: oregon
+    plan: free
+    rootDir: api
+    buildCommand: npm install && (cd ../backend && cmake -B build -S . && cmake --build build || echo "C++ build skipped, using JS Graph engine")
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
