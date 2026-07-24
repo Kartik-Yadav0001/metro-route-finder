@@ -678,13 +678,7 @@ function RouteFinderPage({ language, stations, setToast }) {
               <option value="fastest">Fastest Time</option>
               <option value="cheapest">Cheapest Fare</option>
               <option value="fewest_stops">Fewest Stops (BFS)</option>
-              <option value="fewest_transfers">Fewest Transfers (Interchanges)</option>
-              <option value="astar">A* Search Heuristic</option>
-              <option value="bidirectional_bfs">Bidirectional BFS</option>
-              <option value="bidirectional_dijkstra">Bidirectional Dijkstra</option>
-              <option value="floyd_warshall">Floyd-Warshall All-Pairs</option>
-              <option value="k_shortest">Yen's K-Shortest Paths</option>
-              <option value="ranked">Ranked Recommendation</option>
+              
             </select>
           </div>
         </div>
